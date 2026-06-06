@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>About - Skin Cancer AI</title>
+
+  <!-- GOOGLE FONT -->
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+
+      background:
+      linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),
+      url('skin.jpg');
+
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      background-repeat: no-repeat;
+
+
+      color:white;
+    }
+
+    .main-wrapper{
+      width:100%;
+      min-height:100vh;
+      padding: 120px 50px 40px;
+    }
+
+    .about-container{
+
+      max-width:1100px;
+      margin:auto;
+
+      background:rgba(15,23,42,0.65);
+
+      backdrop-filter:blur(12px);
+
+      border-radius:25px;
+
+      padding:50px;
+
+      box-shadow:0 10px 40px rgba(0,0,0,0.4);
+
+    }
+
+    .page-title{
+
+      text-align:center;
+      font-size:55px;
+      font-weight:700;
+
+      margin-bottom:15px;
+    }
+
+    .page-subtitle{
+
+      text-align:center;
+      color:#cbd5e1;
+
+      margin-bottom:40px;
+
+      font-size:18px;
+    }
+
+    .back-btn{
+
+      display:inline-block;
+
+      padding:14px 28px;
+
+      border-radius:50px;
+
+      background:#06b6d4;
+
+      color:white;
+
+      text-decoration:none;
+
+      font-weight:600;
+
+      transition:0.3s;
+
+      margin-bottom:40px;
+    }
+
+    .back-btn:hover{
+
+      background:#0891b2;
+
+      transform:translateY(-3px);
+    }
+
+    .info-card{
+
+      background:rgba(255,255,255,0.06);
+
+      padding:30px;
+
+      border-radius:20px;
+
+      margin-bottom:30px;
+
+      line-height:1.9;
+
+      transition:0.3s;
+    }
+
+    .info-card:hover{
+
+      transform:translateY(-5px);
+
+      background:rgba(255,255,255,0.09);
+    }
+
+    .info-card h2{
+
+      color:#22d3ee;
+
+      margin-bottom:20px;
+
+      font-size:30px;
+    }
+
+    .info-card p{
+
+      color:#e5e7eb;
+
+      margin-bottom:18px;
+    }
+
+    .highlight{
+
+      color:#facc15;
+
+      font-weight:600;
+    }
+
+    a{
+
+      color:#38bdf8;
+
+      text-decoration:none;
+    }
+
+    a:hover{
+
+      text-decoration:underline;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width:768px){
+
+      .about-container{
+        padding:25px;
+      }
+
+      .page-title{
+        font-size:38px;
+      }
+
+      .page-subtitle{
+        font-size:16px;
+      }
+
+      .info-card h2{
+        font-size:24px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div class="main-wrapper">
+
+    <div class="about-container">
+
+      <h1 class="page-title">
+        About Our AI System
+      </h1>
+
+      <p class="page-subtitle">
+        Skin Cancer Detection Using Deep Learning & TensorFlow.js
+      </p>
+
+      <!-- BACK BUTTON -->
+
+      <a href="index.html" class="back-btn">
+        ← Back To Home
+      </a>
+
+      <!-- PURPOSE -->
+
+      <div class="info-card">
+
+        <h2>Project Purpose</h2>
+
+        <p>
+          This AI-powered system analyzes skin lesion images and predicts
+          possible skin diseases using Deep Learning technology.
+        </p>
+
+        <p>
+          The goal of this project is to assist in the
+          <span class="highlight">
+            early detection of skin cancer
+          </span>
+          using computer vision and artificial intelligence.
+        </p>
+
+      </div>
+
+      <!-- HOW IT WORKS -->
+
+      <div class="info-card">
+
+        <h2>How It Works</h2>
+
+        <p>
+          The model uses TensorFlow.js to process uploaded images directly
+          inside your browser.
+        </p>
+
+        <p>
+          Your images never leave your device, improving
+          privacy and security.
+        </p>
+
+      </div>
+
+      <!-- LESION TYPES -->
+
+      <div class="info-card">
+
+        <h2>Supported Lesion Types</h2>
+
+        <p><span class="highlight">nv</span> — Melanocytic Nevi</p>
+
+        <p><span class="highlight">mel</span> — Melanoma</p>
+
+        <p><span class="highlight">bcc</span> — Basal Cell Carcinoma</p>
+
+        <p><span class="highlight">akiec</span> — Actinic Keratoses</p>
+
+        <p><span class="highlight">bkl</span> — Benign Keratosis</p>
+
+        <p><span class="highlight">vasc</span> — Vascular Lesions</p>
+
+        <p><span class="highlight">df</span> — Dermatofibroma</p>
+
+      </div>
+
+      <!-- LIMITATIONS -->
+
+      <div class="info-card">
+
+        <h2>Limitations</h2>
+
+        <p>
+          This project is currently a prototype and should not replace
+          professional medical diagnosis.
+        </p>
+
+        <p>
+          Prediction accuracy may vary depending on image quality,
+          lighting conditions, and camera quality.
+        </p>
+
+      </div>
+
+      <!-- DATASET -->
+
+      <div class="info-card">
+
+        <h2>Dataset & Research</h2>
+
+        <p>
+          The AI model was trained using the HAM10000 dataset.
+        </p>
+
+        <p>
+          Research Paper:
+          <a href="https://arxiv.org/abs/1803.10417" target="_blank">
+            View Research Paper
+          </a>
+        </p>
+
+      </div>
+
+      <!-- FAQ -->
+
+      <div class="info-card">
+
+        <h2>FAQ</h2>
+
+        <p>
+          <span class="highlight">
+            Will my images be uploaded?
+          </span>
+        </p>
+
+        <p>
+          No. Images are processed locally in your browser
+          using TensorFlow.js.
+        </p>
+
+        <p>
+          <span class="highlight">
+            Is this medically accurate?
+          </span>
+        </p>
+
+        <p>
+          This is an educational AI prototype and should not
+          replace professional diagnosis.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>

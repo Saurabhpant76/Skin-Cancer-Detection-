@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Skin Cancer Detector</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- Your Existing CSS -->
+  <link rel="stylesheet" type="text/css" href="css/app.css" />
+  <link rel="stylesheet" href="css/w3.css" />
+  <link rel="stylesheet" href="css/woza.css" />
+
+  <!-- JS Files -->
+  <script type="text/javascript" src="js/target_classes.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js"></script>
+  <script type="text/javascript" src="js/mobile-net.js"></script>
+
+  <style>
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      font-family:'Poppins',sans-serif;
+    }
+
+    body{
+      overflow-x:hidden;
+      background:#0f172a;
+    }
+
+    /* NAVBAR */
+
+    .navbar{
+
+  width:100%;
+  height:80px;
+
+  background:rgba(0,0,0,0.4);
+
+  backdrop-filter:blur(10px);
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  padding:0 60px;
+
+  position:fixed;
+
+  top:0;
+  left:0;
+
+  z-index:1000;
+
+  transition:top 0.4s ease;
+}
+    .logo{
+      color:white;
+      font-size:30px;
+      font-weight:600;
+    }
+
+    .nav-links a{
+      color:white;
+      display:flex;
+      gap:10px;
+      text-decoration:none;
+      margin-left:35px;
+      font-size:16px;
+      transition:0.3s;
+    }
+
+    .nav-links a:hover{
+      color:#22d3ee;
+    }
+
+    /* HERO SECTION */
+
+    .hero{
+      width:100%;
+      min-height:100vh;
+
+      background:
+      linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
+     url('skin.jpg');
+
+      background-size:cover;
+      background-position:center;
+
+      display:flex;
+      justify-content:center;
+      align-items:center;
+
+      padding:120px 20px 60px;
+    }
+
+    .main-container{
+      width:100%;
+      max-width:1200px;
+
+      background:rgba(15,23,42,0.55);
+
+      border-radius:25px;
+
+      padding:50px;
+
+      backdrop-filter:blur(10px);
+
+      box-shadow:0 10px 40px rgba(0,0,0,0.4);
+
+      text-align:center;
+    }
+
+    .main-title{
+      color:white;
+      font-size:60px;
+      font-weight:700;
+      margin-bottom:15px;
+    }
+
+    .sub-title{
+      color:#d1d5db;
+      font-size:22px;
+      margin-bottom:45px;
+    }
+
+    /* BUTTONS */
+
+    .button-group{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:20px;
+      flex-wrap:wrap;
+
+      margin-bottom:40px;
+    }
+
+    .input-button{
+      border:none;
+      outline:none;
+
+      padding:15px 28px;
+
+      border-radius:50px;
+
+      background:#06b6d4;
+      color:white;
+
+      font-size:17px;
+      font-weight:500;
+
+      cursor:pointer;
+
+      transition:0.3s;
+    }
+
+    .input-button:hover{
+      background:#0891b2;
+      transform:translateY(-3px);
+    }
+
+    .predict-button{
+      background:#facc15 !important;
+      color:#111827 !important;
+      font-weight:700;
+    }
+
+    .predict-button:hover{
+      background:#eab308 !important;
+    }
+
+    /* OUTPUT SECTION */
+
+    .demo-output{
+      display:flex;
+      justify-content:center;
+      gap:30px;
+      flex-wrap:wrap;
+
+      margin-top:30px;
+    }
+
+    .out-box{
+      background:rgba(255,255,255,0.08);
+
+      border-radius:20px;
+
+      padding:20px;
+
+      min-width:320px;
+
+      color:white;
+
+      backdrop-filter:blur(8px);
+    }
+
+    #test-image{
+      width:100%;
+      max-width:400px;
+      max-height:400px;
+      border-radius:15px;
+      object-fit:cover;
+    }
+
+    #prediction{
+      font-size:28px;
+      font-weight:600;
+      color:#22d3ee;
+      margin-top:15px;
+    }
+
+    #predict-list{
+      list-style:none;
+      margin-top:20px;
+      padding:0;
+    }
+
+    #predict-list li{
+      margin:10px 0;
+      font-size:17px;
+      color:#e5e7eb;
+    }
+
+    /* CHART */
+
+  .chart{
+
+  margin-top:40px;
+
+  background:rgba(255,255,255,0.08);
+
+  border-radius:25px;
+
+  padding:25px;
+
+  backdrop-filter:blur(10px);
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+#chart-box{
+
+  width:100% !important;
+
+  max-height:400px;
+}
+.risk-meter {
+  width: 100%;
+  height: 14px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 12px 0;
+}
+
+#risk-fill {
+  height: 100%;
+  width: 0%;
+  border-radius: 20px;
+  transition: width 1s ease-in-out;
+}
+
+    /* LOADER */
+
+    #progress-box{
+      margin-top:20px;
+    }
+
+    #progress-box p{
+      color:white;
+      margin-top:10px;
+    }
+
+    /* RESPONSIVE */
+
+    @media(max-width:768px){
+
+      .navbar{
+        padding:0 20px;
+      }
+
+      .logo{
+        font-size:22px;
+      }
+
+      .nav-links a{
+        margin-left:15px;
+        font-size:14px;
+      }
+
+      .main-title{
+        font-size:40px;
+      }
+
+      .sub-title{
+        font-size:18px;
+      }
+
+      .button-group{
+        flex-direction:column;
+      }
+
+      .input-button{
+        width:100%;
+      }
+
+      .main-container{
+        padding:30px 20px;
+      }
+
+    }
+    /* FEATURES SECTION */
+
+.features{
+
+  padding:100px 20px;
+
+  background:#111827;
+
+  text-align:center;
+}
+
+.feature-title{
+
+  color:white;
+
+  font-size:50px;
+
+  margin-bottom:15px;
+}
+
+.feature-subtitle{
+
+  color:#cbd5e1;
+
+  font-size:18px;
+
+  margin-bottom:60px;
+}
+
+.feature-grid{
+
+  display:flex;
+
+  justify-content:center;
+
+  gap:30px;
+
+  flex-wrap:wrap;
+}
+
+.feature-card{
+
+  width:320px;
+
+  background:rgba(255,255,255,0.06);
+
+  padding:40px 30px;
+
+  border-radius:25px;
+
+  color:white;
+
+  backdrop-filter:blur(10px);
+
+  transition:0.4s;
+
+  box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+
+.feature-card:hover{
+
+  transform:translateY(-12px);
+
+  background:rgba(255,255,255,0.09);
+}
+
+.feature-icon{
+
+  font-size:50px;
+
+  margin-bottom:20px;
+}
+
+.feature-card h3{
+
+  color:#22d3ee;
+
+  margin-bottom:15px;
+
+  font-size:24px;
+}
+
+.feature-card p{
+
+  color:#d1d5db;
+
+  line-height:1.8;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .feature-title{
+    font-size:38px;
+  }
+
+}
+/* FOOTER */
+
+.footer{
+
+  background:#020617;
+
+  padding:60px 20px;
+
+  text-align:center;
+}
+
+.footer-content h2{
+
+  color:white;
+
+  font-size:35px;
+
+  margin-bottom:15px;
+}
+
+.footer-content p{
+
+  color:#94a3b8;
+
+  margin-bottom:25px;
+
+  font-size:16px;
+}
+
+.footer-links{
+
+  display:flex;
+
+  justify-content:center;
+
+  gap:30px;
+
+  margin-bottom:30px;
+
+  flex-wrap:wrap;
+}
+
+.footer-links a{
+
+  color:#22d3ee;
+
+  text-decoration:none;
+
+  font-size:17px;
+
+  transition:0.3s;
+}
+
+.footer-links a:hover{
+
+  color:white;
+}
+
+.footer hr{
+
+  border:none;
+
+  height:1px;
+
+  background:rgba(255,255,255,0.1);
+
+  margin:25px auto;
+
+  max-width:500px;
+}
+
+.copyright{
+
+  color:#64748b;
+
+  font-size:14px;
+}
+
+/* HISTORY SECTION */
+
+.history-section{
+
+  margin-top:60px;
+
+  text-align:left;
+}
+
+.history-section h2{
+
+  color:white;
+
+  margin-bottom:25px;
+
+  font-size:32px;
+}
+
+#history-container{
+
+  display:flex;
+
+  gap:20px;
+
+  flex-wrap:wrap;
+}
+
+.history-card{
+
+  width:220px;
+
+  background:rgba(255,255,255,0.08);
+
+  border-radius:20px;
+
+  overflow:hidden;
+
+  backdrop-filter:blur(10px);
+
+  transition:0.3s;
+}
+
+.history-card:hover{
+
+  transform:translateY(-6px);
+}
+
+.history-card img{
+
+  width:100%;
+
+  height:180px;
+
+  object-fit:cover;
+}
+
+.history-content{
+
+  padding:15px;
+}
+
+.history-content h3{
+
+  color:#22d3ee;
+
+  margin-bottom:8px;
+}
+
+.history-content p{
+
+  color:#cbd5e1;
+
+  font-size:14px;
+}
+
+.empty-history{
+
+  color:#94a3b8;
+}
+.image-wrapper{
+  position:relative;
+  width:400px;
+  height:400px;
+  overflow:hidden;
+  border-radius:15px;
+  flex:0 0 400px;
+}
+
+#test-image{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+#heatmap-canvas{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  pointer-events:none;
+}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+
+  <nav class="navbar">
+
+    <div class="logo">
+      Skin Cancer Detector
+    </div>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="faq.html">About</a>
+    </div>
+
+  </nav>
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="main-container">
+
+      <h1 class="main-title">
+        Skin Cancer Detector
+      </h1>
+
+      <p class="sub-title">
+        Skin Cancer Prediction Using Deep Learning
+      </p>
+
+      <!-- BUTTONS -->
+
+      <div class="button-group">
+
+        <button
+          id="load-button"
+          class="input-button"
+          onclick="loadModel()"
+        >
+          Load Model
+        </button>
+
+        <button
+          id="demo-image-button"
+          class="input-button"
+          onclick="loadDemoImage()"
+        >
+          Demo Image
+        </button>
+
+        <label for="select-file-image" class="input-button">
+          Upload Image
+        </label>
+
+       <input
+            id="select-file-image"
+            type="file"
+            accept="image/*"
+             capture="environment"
+            onchange="loadFile(event)"
+            hidden
+                  />
+        <button
+          id="predict-button"
+          class="input-button predict-button"
+          onclick="predButton()"
+        >
+          Predict
+        </button>
+
+      </div>
+
+      <!-- LOADING -->
+
+      <div
+        id="progress-box"
+        style="display:none;"
+      >
+        <img src="assets/loading.gif" id="demo-load" width="100px" />
+
+        <p>
+          Loading Deep Learning Model...
+        </p>
+      </div>
+
+    
+
+      <!-- OUTPUT -->
+
+<div class="demo-output">
+
+  <!-- IMAGE -->
+ <div class="out-box" id="select-file-box" style="display:none">
+  <div class="image-wrapper">
+    <img id="test-image" />
+    <canvas id="heatmap-canvas"></canvas>
+  </div>
+</div>
+
+  <!-- PREDICTION -->
+  <div class="out-box" id="predict-box" style="display:none">
+
+    <h2 style="color:white;">
+      Prediction Result
+    </h2>
+
+    <p id="prediction"></p>
+
+    <br />
+
+    <p style="color:#cbd5e1; font-size:18px;">
+      Top-3 Predictions
+    </p>
+
+    <ul id="predict-list"></ul>
+
+  </div>
+
+  <!-- Ai Explanation -->
+  <div class="out-box" id="explain-box" style="display:none">
+
+    <h2 style="color:white;">
+      AI Analysis Report
+    </h2>
+
+    <div id="risk-badge" style="
+      display:inline-block;
+      padding:6px 12px;
+      border-radius:20px;
+      font-weight:bold;
+      margin-bottom:15px;
+      color:white;
+    "></div>
+        <!-- Risk Meter -->
+       <div class="risk-meter">
+    <div id="risk-fill"></div>
+  </div>
+
+    <p id="explain-text" style="color:#cbd5e1;"></p>
+
+  </div>
+
+</div>
+
+      <!-- CHART -->
+
+      <div class="chart">
+
+        <canvas
+          id="chart-box"
+          style="display:none"
+          height="120"
+        ></canvas>
+
+      </div>
+
+    </div>
+
+  </section>
+<!-- FEATURES SECTION -->
+
+<section class="features">
+
+  <h2 class="feature-title">
+    Why Choose Our AI?
+  </h2>
+
+  <p class="feature-subtitle">
+    Advanced Deep Learning technology for intelligent skin lesion analysis
+  </p>
+
+  <div class="feature-grid">
+
+    <!-- CARD 1 -->
+
+    <div class="feature-card">
+
+      <div class="feature-icon">
+        ⚡
+      </div>
+
+      <h3>
+        Fast Detection
+      </h3>
+
+      <p>
+        Get instant AI-powered skin cancer predictions
+        within seconds.
+      </p>
+
+    </div>
+
+    <!-- CARD 2 -->
+
+    <div class="feature-card">
+
+      <div class="feature-icon">
+        🔒
+      </div>
+
+      <h3>
+        Privacy Safe
+      </h3>
+
+      <p>
+        Your uploaded images never leave your device.
+        Everything runs locally.
+      </p>
+
+    </div>
+
+    <!-- CARD 3 -->
+
+    <div class="feature-card">
+
+      <div class="feature-icon">
+        📊
+      </div>
+      
+
+      <h3>
+        AI Accuracy
+      </h3>
+
+      <p>
+        Trained using HAM10000 dermatology dataset
+        with Deep Learning models.
+      </p>
+
+    </div>
+
+  </div>
+  <!-- HISTORY SECTION -->
+
+<div class="history-section">
+
+  <h2>
+    Prediction History
+  </h2>
+
+  <div id="history-container">
+
+    <p class="empty-history">
+      No predictions yet...
+    </p>
+
+  </div>
+
+</div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+  <div class="footer-content">
+
+    <h2>
+      Skin Cancer AI
+    </h2>
+
+    <p>
+      AI-powered skin lesion detection using Deep Learning
+      and TensorFlow.js
+    </p>
+
+    <div class="footer-links">
+
+      <a href="index.html">
+        Home
+      </a>
+
+      <a href="faq.html">
+        About
+      </a>
+
+    </div>
+
+    <hr>
+
+    <p class="copyright">
+      © 2026 Skin Cancer AI | Educational Project
+    </p>
+
+  </div>
+
+</footer>
+<script>
+
+let lastScrollTop = 0;
+
+const navbar = document.querySelector(".navbar");
+
+window.addEventListener("scroll", () => {
+
+  let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+  if(scrollTop > lastScrollTop){
+
+    navbar.style.top = "-100px";
+
+  } else {
+
+    navbar.style.top = "0";
+  }
+
+  lastScrollTop = scrollTop;
+
+});
+
+</script>
+</body>
+</html>
